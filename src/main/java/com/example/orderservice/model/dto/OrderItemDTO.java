@@ -31,6 +31,7 @@ public class OrderItemDTO {
         this.price = price;
         this.amount = amount;
     }
+
     public static List<OrderItemDTO> fromList(List<OrderItem> items) {
         List<OrderItemDTO> orderItems = new ArrayList<>();
         for (OrderItem item : items
