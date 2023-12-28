@@ -1,5 +1,9 @@
 package com.example.orderservice.config;
 
+import com.example.orderservice.model.dto.CartDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -12,6 +16,7 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
@@ -39,7 +44,18 @@ public class KafkaConsumerConfig {
 
     @KafkaListener(topics = "NEW_ORDER_PLACED", groupId = "new-order-id")
     public void listen(String message) {
+
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        JavaType stringType = objectMapper.getTypeFactory().constructType(String.class);
+//        JavaType cartDtoType = objectMapper.getTypeFactory().constructType(CartDTO.class);
+//        JavaType mapType = objectMapper.getTypeFactory().constructMapType(Map.class, stringType, cartDtoType);
+//
+//        try {
+//            Map<String, CartDTO> cartMap = objectMapper.readValue(message, mapType);
+//            System.out.println(cartMap);
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
         System.out.println(message);
-        System.out.println("hello");
     }
 }
