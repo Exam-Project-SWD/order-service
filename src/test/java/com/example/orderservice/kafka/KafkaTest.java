@@ -1,8 +1,6 @@
 package com.example.orderservice.kafka;
 
 
-import com.example.orderservice.service.KafkaService;
-import com.example.orderservice.service.KafkaServiceImpl;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
