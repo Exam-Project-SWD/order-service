@@ -1,7 +1,5 @@
 package com.example.orderservice.config;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -13,10 +11,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 @Configuration
 @RequiredArgsConstructor
@@ -45,5 +40,6 @@ public class KafkaConsumerConfig {
     @KafkaListener(topics = "NEW_ORDER_PLACED", groupId = "new-order-id")
     public void listen(String message) {
         System.out.println(message);
+        System.out.println("hello");
     }
 }
