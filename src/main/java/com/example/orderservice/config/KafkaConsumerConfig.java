@@ -64,17 +64,6 @@ public class KafkaConsumerConfig {
             CartDTO cart = objectMapper.readValue(message, CartDTO.class);
 
             OrderDTO order = new OrderDTO(cart);
-//
-//                    Order.builder()
-//                    .customerId(cart.getCustomerId())
-//                    .restaurantId(cart.getRestaurantId())
-//                    .createdAt(new Timestamp(System.currentTimeMillis()))
-//                    .status(OrderStatus.PENDING)
-//                    .items(OrderItem.fromList(OrderItemDTO.fromCartItems(cart.getItems())))
-//                    .orderPrice(cart.getTotalPrice())
-//                    .deliveryPrice(29)
-//                    .withDelivery(cart.isWithDelivery())
-//                    .build();
 
             orderService.saveOrder(order);
 
