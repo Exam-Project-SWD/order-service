@@ -12,7 +12,6 @@ import java.util.List;
 @Setter
 @Builder
 public class OrderItemDTO {
-    private int id;
     private int menuItemId;
     private int quantity;
     private int orderId;
@@ -21,7 +20,7 @@ public class OrderItemDTO {
         List<OrderItemDTO> orderItems = new ArrayList<>();
         for (OrderItem item : items
         ) {
-            orderItems.add(new OrderItemDTO(item.getId(),
+            orderItems.add(new OrderItemDTO(
                     item.getMenuItemId(),
                     item.getQuantity(), item.getOrder().getId()));
         }

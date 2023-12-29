@@ -15,7 +15,6 @@ import java.util.List;
 @Getter
 @Setter
 public class OrderDTO {
-    private int id;
     private int customerId;
     private int restaurantId;
     private OrderStatus status;
@@ -33,8 +32,7 @@ public class OrderDTO {
         this.status = status;
         this.items = items;
     }
-    public OrderDTO(int id, int customerId, int restaurantId, OrderStatus status, Timestamp createdAt, List<OrderItemDTO> items, boolean withDelivery, String processId) {
-        this.id = id;
+    public OrderDTO(int customerId, int restaurantId, OrderStatus status, Timestamp createdAt, List<OrderItemDTO> items, boolean withDelivery, String processId) {
         this.customerId = customerId;
         this.restaurantId = restaurantId;
         this.status = status;
@@ -54,7 +52,7 @@ public class OrderDTO {
     }
 
     public static OrderDTO fromOrder(Order order) {
-        return new OrderDTO(order.getId(),
+        return new OrderDTO(
                 order.getCustomerId(),
                 order.getRestaurantId(),
                 order.getStatus(),

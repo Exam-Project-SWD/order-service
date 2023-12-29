@@ -3,13 +3,8 @@ package com.example.orderservice.config;
 import com.example.orderservice.model.dto.CartDTO;
 import com.example.orderservice.model.dto.OrderDTO;
 import com.example.orderservice.model.dto.OrderItemDTO;
-import com.example.orderservice.model.entity.Order;
-import com.example.orderservice.model.entity.OrderItem;
-import com.example.orderservice.model.enums.OrderStatus;
-import com.example.orderservice.repository.OrderRepository;
+import com.example.orderservice.service.KafkaService;
 import com.example.orderservice.service.OrderService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -23,20 +18,17 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
 public class KafkaConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
-
     @Autowired
     private final OrderService orderService;
+    @Autowired
+    private final KafkaService kafkaService;
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
@@ -56,7 +48,7 @@ public class KafkaConsumerConfig {
         return factory;
     }
 
-    @KafkaListener(topics = "NEW_ORDER_PLACED", groupId = "new-order-id")
+    @KafkaListener(topics = "NEW_ORDER_PLACED", groupId = "new-order-placed-id")
     public void listen(String message) {
         System.out.println(message);
         try {
@@ -66,6 +58,8 @@ public class KafkaConsumerConfig {
             OrderDTO order = new OrderDTO(cart);
 
             orderService.saveOrder(order);
+
+            kafkaService.sendOrderToRestaurant(order);
 
         } catch (Exception e) {
             e.printStackTrace();
