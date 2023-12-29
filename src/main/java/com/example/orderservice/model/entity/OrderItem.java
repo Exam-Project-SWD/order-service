@@ -28,16 +28,18 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-
+    public OrderItem(int menuItemId, int quantity) {
+        this.menuItemId = menuItemId;
+        this.quantity = quantity;
+    }
 
     public static List<OrderItem> fromList(List<OrderItemDTO> items) {
         List<OrderItem> orderItems = new ArrayList<>();
-//        for (OrderItemDTO item : items
-//        ) {
-//            //OrderItem orderItem = new OrderItem(item.getName(), item.getPrice(), item.getQuantity());
-//            orderItem.setMenuItemId(item.getMenuItemId());
-//            orderItems.add(orderItem);
-//        }
+        for (OrderItemDTO item : items
+        ) {
+            OrderItem orderItem = new OrderItem(item.getMenuItemId(), item.getQuantity());
+            orderItems.add(orderItem);
+        }
         return orderItems;
     }
 }

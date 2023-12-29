@@ -48,11 +48,13 @@ public class Order {
         Order order = Order.builder()
                 .customerId(dto.getCustomerId())
                 .restaurantId(dto.getRestaurantId())
-                .status(dto.getStatus())
-                .withDelivery(dto.isWithDelivery())
-                .items(OrderItem.fromList(dto.getItems()))
-                .processId(dto.getProcessId())
                 .createdAt(Timestamp.valueOf(LocalDateTime.now()))
+                .status(dto.getStatus())
+                .items(OrderItem.fromList(dto.getItems()))
+                .orderPrice(dto.getOrderPrice())
+                .withDelivery(dto.isWithDelivery())
+                .deliveryPrice(29)      //TODO: Should be calculated based on distance - for now always 29 kr
+                .processId(dto.getProcessId())
                 .build();
         for (OrderItem item : order.getItems()) {
             item.setOrder(order);

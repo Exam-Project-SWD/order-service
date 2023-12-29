@@ -24,6 +24,8 @@ public class OrderDTO {
     private Timestamp deliveryTime;
     private boolean withDelivery;
     private String processId;
+    private double orderPrice;
+
 
     public OrderDTO(int customerId, int restaurantId, OrderStatus status, List<OrderItemDTO> items) {
         this.customerId = customerId;
@@ -42,12 +44,13 @@ public class OrderDTO {
         this.processId = processId;
     }
 
-    public OrderDTO(NewOrderDTO dto) {
+    public OrderDTO(CartDTO dto) {
         this.customerId = dto.getCustomerId();
         this.restaurantId = dto.getRestaurantId();
         this.status = OrderStatus.PENDING;
         this.withDelivery = dto.isWithDelivery();
-        this.items = OrderItemDTO.fromNewItems(dto.getItems());
+        this.items = OrderItemDTO.fromCartItems(dto.getItems());
+        this.orderPrice = dto.getTotalPrice();
     }
 
     public static OrderDTO fromOrder(Order order) {

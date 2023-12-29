@@ -2,14 +2,19 @@ package com.example.orderservice.config;
 
 import com.example.orderservice.model.dto.CartDTO;
 import com.example.orderservice.model.dto.OrderDTO;
+import com.example.orderservice.model.dto.OrderItemDTO;
 import com.example.orderservice.model.entity.Order;
+import com.example.orderservice.model.entity.OrderItem;
 import com.example.orderservice.model.enums.OrderStatus;
+import com.example.orderservice.repository.OrderRepository;
+import com.example.orderservice.service.OrderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +24,9 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -27,6 +34,9 @@ import java.util.Map;
 public class KafkaConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
+
+    @Autowired
+    private final OrderService orderService;
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
@@ -48,18 +58,26 @@ public class KafkaConsumerConfig {
 
     @KafkaListener(topics = "NEW_ORDER_PLACED", groupId = "new-order-id")
     public void listen(String message) {
+        System.out.println(message);
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             CartDTO cart = objectMapper.readValue(message, CartDTO.class);
-            System.out.println(cart.getTotalPrice());
 
-            Order order = Order.builder()
-                    .customerId(cart.getCustomerId())
-                    .restaurantId(cart.getRestaurantId())
-                    .createdAt(new Timestamp(System.currentTimeMillis()))
-                    .status(OrderStatus.PENDING)
-                    //.items()
-                    .build();
+            OrderDTO order = new OrderDTO(cart);
+//
+//                    Order.builder()
+//                    .customerId(cart.getCustomerId())
+//                    .restaurantId(cart.getRestaurantId())
+//                    .createdAt(new Timestamp(System.currentTimeMillis()))
+//                    .status(OrderStatus.PENDING)
+//                    .items(OrderItem.fromList(OrderItemDTO.fromCartItems(cart.getItems())))
+//                    .orderPrice(cart.getTotalPrice())
+//                    .deliveryPrice(29)
+//                    .withDelivery(cart.isWithDelivery())
+//                    .build();
+
+            orderService.saveOrder(order);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

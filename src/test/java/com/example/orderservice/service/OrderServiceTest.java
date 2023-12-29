@@ -1,6 +1,6 @@
 package com.example.orderservice.service;
 
-import com.example.orderservice.model.dto.NewOrderDTO;
+import com.example.orderservice.model.dto.CartDTO;
 import com.example.orderservice.model.dto.OrderDTO;
 import com.example.orderservice.model.entity.Order;
 import com.example.orderservice.model.enums.OrderStatus;
@@ -52,10 +52,10 @@ class OrderServiceTest {
     @Test
     void given_newOrder_whenSaved_returnOrderDtoWithId() {
         // Arrange
-        NewOrderDTO newOrderDTO = new NewOrderDTO(
+        CartDTO newOrderDTO = new CartDTO(
                 1,
                 1,
-                new Date(),
+                20,
                 false,
                 Collections.emptyList()
         );

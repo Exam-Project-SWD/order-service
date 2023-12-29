@@ -28,9 +28,9 @@ public class OrderItemDTO {
         return orderItems;
     }
 
-    public static List<OrderItemDTO> fromNewItems(List<NewOrderItem> items) {
+    public static List<OrderItemDTO> fromCartItems(List<CartItemDTO> items) {
         List<OrderItemDTO> orderItems = new ArrayList<>();
-        for (NewOrderItem item : items
+        for (CartItemDTO item : items
         ) {
             OrderItemDTO dto = new OrderItemDTO();
             dto.setMenuItemId(item.getMenuItemId());

@@ -13,7 +13,6 @@ import java.util.List;
 @Getter
 @Setter
 public class CartDTO {
-    private int id;
     private int customerId;
     private int restaurantId;
     private double totalPrice;
