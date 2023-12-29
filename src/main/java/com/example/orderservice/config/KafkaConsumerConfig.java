@@ -1,6 +1,9 @@
 package com.example.orderservice.config;
 
 import com.example.orderservice.model.dto.CartDTO;
+import com.example.orderservice.model.dto.OrderDTO;
+import com.example.orderservice.model.entity.Order;
+import com.example.orderservice.model.enums.OrderStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +18,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,18 +48,20 @@ public class KafkaConsumerConfig {
 
     @KafkaListener(topics = "NEW_ORDER_PLACED", groupId = "new-order-id")
     public void listen(String message) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            CartDTO cart = objectMapper.readValue(message, CartDTO.class);
+            System.out.println(cart.getTotalPrice());
 
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        JavaType stringType = objectMapper.getTypeFactory().constructType(String.class);
-//        JavaType cartDtoType = objectMapper.getTypeFactory().constructType(CartDTO.class);
-//        JavaType mapType = objectMapper.getTypeFactory().constructMapType(Map.class, stringType, cartDtoType);
-//
-//        try {
-//            Map<String, CartDTO> cartMap = objectMapper.readValue(message, mapType);
-//            System.out.println(cartMap);
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-        System.out.println(message);
+            Order order = Order.builder()
+                    .customerId(cart.getCustomerId())
+                    .restaurantId(cart.getRestaurantId())
+                    .createdAt(new Timestamp(System.currentTimeMillis()))
+                    .status(OrderStatus.PENDING)
+                    //.items()
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
