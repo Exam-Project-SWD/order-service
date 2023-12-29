@@ -2,6 +2,8 @@ package com.example.orderservice.config;
 
 import com.example.orderservice.model.dto.CartDTO;
 import com.example.orderservice.model.dto.OrderDTO;
+import com.example.orderservice.model.dto.OrderItemDTO;
+import com.example.orderservice.service.KafkaService;
 import com.example.orderservice.service.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,10 @@ import java.util.HashMap;
 public class KafkaConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
-
     @Autowired
     private final OrderService orderService;
+    @Autowired
+    private final KafkaService kafkaService;
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
@@ -45,7 +48,7 @@ public class KafkaConsumerConfig {
         return factory;
     }
 
-    @KafkaListener(topics = "NEW_ORDER_PLACED", groupId = "new-order-id")
+    @KafkaListener(topics = "NEW_ORDER_PLACED", groupId = "new-order-placed-id")
     public void listen(String message) {
         System.out.println(message);
         try {
@@ -55,6 +58,8 @@ public class KafkaConsumerConfig {
             OrderDTO order = new OrderDTO(cart);
 
             orderService.saveOrder(order);
+
+            kafkaService.sendOrderToRestaurant(order);
 
         } catch (Exception e) {
             e.printStackTrace();
