@@ -2,7 +2,6 @@ package com.example.orderservice.listener;
 
 import com.example.orderservice.model.dto.CartDTO;
 import com.example.orderservice.model.dto.OrderDTO;
-import com.example.orderservice.model.entity.Order;
 import com.example.orderservice.service.KafkaService;
 import com.example.orderservice.service.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,11 +41,10 @@ public class KafkaListeners {
         System.out.println(message);
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            OrderDTO order = objectMapper.readValue(message, OrderDTO.class);
+            OrderDTO orderDTO = objectMapper.readValue(message, OrderDTO.class);
 
-            //Order newOrder = Order.fromDto(orderService.getOrderById(order.getCustomerId()));
-
-            orderService.saveOrder(order);
+            int orderId = orderService.getOrderByCustomerIdAndRestaurantId(orderDTO.getCustomerId(), orderDTO.getRestaurantId());
+            orderService.updateOrderStatus(orderId, orderDTO.getStatus());
 
         } catch (Exception e) {
             e.printStackTrace();

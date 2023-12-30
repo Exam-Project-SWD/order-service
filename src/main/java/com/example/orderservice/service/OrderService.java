@@ -22,12 +22,17 @@ public class OrderService {
     public OrderDTO updateOrderStatus(int orderId, OrderStatus newStatus) {
         Order order = orderRepository.findById(orderId).orElseThrow();
         order.setStatus(newStatus);
-        OrderDTO orderDTO = OrderDTO.fromOrder(order);
-        return orderDTO;
+        orderRepository.save(order);
+        return OrderDTO.fromOrder(order);
     }
 
     public OrderDTO getOrderById(int orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
         return OrderDTO.fromOrder(order);
+    }
+
+    public int getOrderByCustomerIdAndRestaurantId(int customerId, int restaurantId) {
+        Order order = orderRepository.findByCustomerIdAndRestaurantId(customerId, restaurantId);
+        return order.getId();
     }
 }
