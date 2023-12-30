@@ -47,22 +47,4 @@ public class KafkaConsumerConfig {
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
-
-    @KafkaListener(topics = "NEW_ORDER_PLACED", groupId = "new-order-placed-id")
-    public void listen(String message) {
-        System.out.println(message);
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            CartDTO cart = objectMapper.readValue(message, CartDTO.class);
-
-            OrderDTO order = new OrderDTO(cart);
-
-            orderService.saveOrder(order);
-
-            kafkaService.sendOrderToRestaurant(order);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
