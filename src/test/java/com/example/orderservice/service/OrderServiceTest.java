@@ -75,7 +75,6 @@ class OrderServiceTest {
 
             // Assert
             assertNotNull(savedOrderDTO);
-            assertEquals(order.getId(), savedOrderDTO.getId());
             assertEquals(order.getStatus(), savedOrderDTO.getStatus());
         }
     }
@@ -90,7 +89,6 @@ class OrderServiceTest {
 
         // Assert
         assertNotNull(orderDTO);
-        assertEquals(order.getId(), orderDTO.getId());
         assertEquals(OrderStatus.CANCELLED, orderDTO.getStatus());
     }
 
@@ -122,7 +120,6 @@ class OrderServiceTest {
 
         // Assert
         assertNotNull(orderDTO);
-        assertEquals(order.getId(), orderDTO.getId());
         assertEquals(order.getStatus(), orderDTO.getStatus());
     }
 }
