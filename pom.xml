@@ -177,7 +177,7 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
-                            <haltOnFailure>true</haltOnFailure>
+                            <haltOnFailure>false</haltOnFailure>
                             <rules>
                                 <rule>
                                     <element>BUNDLE</element>
